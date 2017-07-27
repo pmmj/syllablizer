@@ -13,7 +13,7 @@ def isVowel(c):
     return result
     
 def isConsonant(c):
-    result = (c in string.ascii_letters) and (c not in vowels)
+    result = (c[0] in string.ascii_letters) and (c[0] not in vowels)
     if len(c) != 1:
         for l in c[1:]:
             result = result and (l in string.ascii_letters) and (l not in vowels)
@@ -28,7 +28,9 @@ def syllablize(s):
     while i < n:
         c = s[i]
         if cur_syllable != "":
-            if isVowel(c):
+            if i < n-1 and not isLetter(s[i+1]):
+                cur_syllable += c
+            elif isVowel(c):
                 if isConsonant(cur_syllable) or isVowel(cur_syllable[-1]):
                     cur_syllable += c
                 else:
@@ -36,11 +38,26 @@ def syllablize(s):
                     cur_syllable = c
             elif isConsonant(c):
                 # syllable must end with a vowel
-                if cur_syllable == "" or isVowel(cur_syllable[-1]):
+                if cur_syllable == "" or (isVowel(cur_syllable[-1]) and i < n -1 and not isVowel(s[i+1])) or cur_syllable[-1] == c:
                     cur_syllable += c
                 elif isLetter(c):
-                    syllables.append(cur_syllable)
-                    cur_syllable = c
+                    if cur_syllable[-1] in "nmrl" and i < n-1 and s[i+1] == 'e' and i < n-2 and not isLetter(s[i+2]):
+                        cur_syllable += c
+                        cur_syllable += s[i+1]
+                        i += 1
+                    elif c == 'h' and cur_syllable[-1] in "stcpwg":
+                            cur_syllable += c
+                    # elif c == 't' and cur_syllable[-1] in "srnm" and i == n-1:
+                    #         cur_syllable += c
+                    elif c == 'r' and isConsonant(cur_syllable[-1]):
+                            cur_syllable += c
+
+                    elif cur_syllable[-1] == 's' and ( (i < n-1 and not isLetter(s[i+1])) or ( i > 1 and not isLetter(s[i-2])) ) :
+                        cur_syllable += c
+
+                    else:
+                        syllables.append(cur_syllable)
+                        cur_syllable = c
             else:
                 if cur_syllable != "":
                     syllables.append(cur_syllable)
