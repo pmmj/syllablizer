@@ -52,6 +52,18 @@ def syllablize(s):
                     elif c == 'r' and isConsonant(cur_syllable[-1]):
                             cur_syllable += c
 
+                    elif (c == 'r' and i < n-3 and s[i+1] == "e" and s[i+2] in "ds" and not isLetter(s[i+3])):
+                        cur_syllable += c
+                        cur_syllable += s[i+1]
+                        cur_syllable += s[i+2]
+                        i += 2
+
+                    elif (c == 'r' and i < n-2 and s[i+1] == "e" and not isLetter(s[i+2])):
+                        cur_syllable += c
+                        cur_syllable += s[i+1]
+                        i += 1
+
+
                     elif cur_syllable[-1] == 's' and ( (i < n-1 and not isLetter(s[i+1])) or ( i > 1 and not isLetter(s[i-2])) ) :
                         cur_syllable += c
 
