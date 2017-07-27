@@ -38,10 +38,10 @@ def syllablize(s):
                     cur_syllable = c
             elif isConsonant(c):
                 # syllable must end with a vowel
-                if cur_syllable == "" or (isVowel(cur_syllable[-1]) and i < n -1 and not isVowel(s[i+1])) or cur_syllable[-1] == c:
+                if cur_syllable == "" or isVowel(cur_syllable[-1]) and (i < n -1 and (not isVowel(s[i+1]) and s[i+1] != 'y')) or cur_syllable[-1] == c:
                     cur_syllable += c
                 elif isLetter(c):
-                    if cur_syllable[-1] in "nmrl" and i < n-1 and s[i+1] == 'e' and i < n-2 and not isLetter(s[i+2]):
+                    if cur_syllable[-1] in "nmrl" and i < n-1 and s[i+1] in 'edsh' and i < n-2 and not isLetter(s[i+2]):
                         cur_syllable += c
                         cur_syllable += s[i+1]
                         i += 1
